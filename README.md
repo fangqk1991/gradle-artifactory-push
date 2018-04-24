@@ -62,3 +62,12 @@ apply from: 'https://raw.githubusercontent.com/fangqk1991/gradle-artifactory-pus
 ./gradlew assembleRelease
 ./gradlew artifactoryPublish
 ```
+
+#### 一些思路
+1. Gradle 3.4 后的依赖设置中，`compile` 已被废弃，由 `implementation` 和 `api` 取而代之，[参见文档](https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration.html#new_configurations)。出于兼容的目的，`my-arti.gradle` 脚本的 pom 文件生成方法中对 `compile`、`implementation`、`api` 均作了遍历。
+2. 个人认为 `gradle.properties` 通常存放本机配置，实际不应受版本控制。
+3. 子模块包信息 (arti_group_id, arti_id, arti_version) 在 `build.gradle` 中声明比在 `gradle.properties` 中更合适。
+
+
+
+
