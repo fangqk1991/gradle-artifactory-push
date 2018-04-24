@@ -27,7 +27,7 @@ arti_username=admin
 arti_password=123456
 ```
 
-#### 3. 编辑根目录 `build.gradle`
+#### 3. 编辑工程根目录 `build.gradle`
 加入相关依赖
 
 ```
@@ -36,7 +36,7 @@ buildscript {
         ...
         ///////////////// 添加 /////////////////
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.7.1"
-        ///////////////// /// /////////////////
+        ///////////////////////////////////////
     }
 }
 ```
@@ -54,7 +54,7 @@ ext {
 }
 
 apply from: 'https://raw.githubusercontent.com/fangqk1991/gradle-artifactory-push/master/my-arti.gradle'
-///////////////// /// /////////////////
+///////////////////////////////////////
 ```
 
 #### 5. 发布
