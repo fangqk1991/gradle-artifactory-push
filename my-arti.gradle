@@ -1,0 +1,57 @@
+apply plugin: 'com.jfrog.artifactory'
+apply plugin: 'maven-publish'
+
+publishing {
+    publications {
+        aar(MavenPublication) {
+
+            groupId project.property('arti_group_id')
+            version project.property('arti_version')
+            artifactId project.property('arti_id')
+
+            artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
+
+            pom.withXml {
+
+                def dependencies = asNode().appendNode('dependencies')
+
+                def appendDependencies = {
+                    if(it instanceof ExternalModuleDependency)
+                    {
+                        def dependency = dependencies.appendNode('dependency')
+                        dependency.appendNode('groupId', it.group)
+                        dependency.appendNode('artifactId', it.name)
+                        dependency.appendNode('version', it.version)
+                    }
+                }
+
+                configurations.compile.allDependencies.each {
+                    appendDependencies(it)
+                }
+                configurations.implementation.allDependencies.each {
+                    appendDependencies(it)
+                }
+                configurations.api.allDependencies.each {
+                    appendDependencies(it)
+                }
+            }
+        }
+    }
+}
+
+artifactory {
+    contextUrl = arti_maven_path
+    publish {
+        repository {
+            repoKey = arti_repo_key
+            username = arti_username
+            password = arti_password
+        }
+        defaults {
+            publications('aar')
+            publishArtifacts = true
+            properties = ['qa.level': 'basic', 'dev.team': 'core']
+            publishPom = true
+        }
+    }
+}
